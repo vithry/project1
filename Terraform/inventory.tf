@@ -1,7 +1,7 @@
 data "template_file" "inventory_ansible" {
   template = "${file("inventory_ansible.tpl")}"
 
-  vars {
+  vars = {
     mngm_ip  = "${aws_instance.Server1.public_ip}"
     key_path = "${var.instance_key_path}"
   }
@@ -9,7 +9,7 @@ data "template_file" "inventory_ansible" {
 
 resource "null_resource" "update_ansible_inventory" {
 
-  triggers {
+  triggers = {
     template = data.template_file.inventory_ansible.rendered
   }
 
