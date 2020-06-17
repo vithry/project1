@@ -16,5 +16,6 @@ resource "aws_instance" "Server1" {
     ignore_changes = [
       ami
     ]
+    create_before_destroy = true
   }
 }

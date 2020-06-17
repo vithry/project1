@@ -5,7 +5,7 @@ variable "aws_region" { default = "eu-central-1" }
 
 #main
 variable "project_env" { default = "dev" }
-variable "project_name" { default = "MyProject" }
+variable "project_name" { default = "project1" }
 variable "owner" { default = "Vitalii" }
 
 #ec2
