@@ -1,0 +1,65 @@
+---
+  - name: Configuration Server1
+    hosts: management
+    become: yes
+
+    tasks:
+
+
+
+      - name: Install docker packages
+        apt: name={{ item }} state=latest update_cache=yes
+        loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common',]
+        tags:
+            - docker
+
+      - name: Add Docker s official GPG key
+        apt_key: url=https://download.docker.com/linux/ubuntu/gpg state=present
+        tags:
+          - docker
+
+      - name: Verify that we have the key with the fingerprint
+        apt_key: id=0EBFCD88 state=present
+        tags:
+          - docker
+
+      - name: Set up the stable repository
+        apt_repository:
+          repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+          state: present
+          update_cache: yes
+        tags:
+          - docker
+
+      - name: Update apt packages
+        apt: update_cache=yes
+        tags:
+          - docker
+
+      - name: Install docker
+        apt: name=docker-ce state=present update_cache=yes
+          #notify: Start docker on boot
+        tags:
+          - docker
+
+      - name: Add remote "ubuntu" user to "docker" group
+        user: name=ubuntu group=docker append=yes
+        tags:
+          - docker
+
+      - name: Install docker-compose
+        get_url:
+          url=https://github.com/docker/compose/releases/download/1.25.1-rc1/docker-compose-Linux-x86_64
+          dest=/usr/local/bin/docker-compose mode=u+x,g+x
+
+      - name: Install Git
+        apt: name=git state=latest
+
+      - name: Install MC
+        apt: name=mc state=latest
+
+      - name: Install wget
+        apt: name=wget state=latest
+
+      - name: Install tree
+        apt: name=tree state=latest
