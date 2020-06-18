@@ -9,9 +9,16 @@
         hostname:
           name: server1
 
-      - name: Install docker packages
+      - name: 'Add hostname to /etc/hosts'
+        lineinfile:
+          path: /etc/hosts
+          regexp: '^127\.0\.0\.1[ \t]+localhost'
+          line: '127.0.0.1 localhost server1'
+          state: present
+
+      - name: Install additional packages
         apt: name={{ item }} state=latest update_cache=yes
-        loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common',]
+        loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'git', 'mc', 'tree', 'wget' ]
         tags:
             - docker
 
@@ -53,15 +60,3 @@
         get_url:
           url=https://github.com/docker/compose/releases/download/1.25.1-rc1/docker-compose-Linux-x86_64
           dest=/usr/local/bin/docker-compose mode=u+x,g+x
-
-      - name: Install Git
-        apt: name=git state=latest
-
-      - name: Install MC
-        apt: name=mc state=latest
-
-      - name: Install wget
-        apt: name=wget state=latest
-
-      - name: Install tree
-        apt: name=tree state=latest
