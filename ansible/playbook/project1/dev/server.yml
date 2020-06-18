@@ -5,7 +5,9 @@
 
     tasks:
 
-
+      - name: Hostname change
+        hostname:
+          name: server1
 
       - name: Install docker packages
         apt: name={{ item }} state=latest update_cache=yes
