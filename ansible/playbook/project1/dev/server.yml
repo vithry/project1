@@ -60,3 +60,12 @@
         get_url:
           url=https://github.com/docker/compose/releases/download/1.25.1-rc1/docker-compose-Linux-x86_64
           dest=/usr/local/bin/docker-compose mode=u+x,g+x
+
+      - name: Reboot host and wait for it to restart
+        reboot:
+          msg: "Reboot initiated by Ansible"
+          connect_timeout: 5
+          reboot_timeout: 600
+          pre_reboot_delay: 0
+          post_reboot_delay: 30
+          test_command: hostname
